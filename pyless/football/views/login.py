@@ -22,6 +22,7 @@ def login_view(request, username=None):
         remember = request.POST.get('remember') != None
         return do_login(request, username, password, remember)
 
+
 def render_login(request, ctx=None):
     """Helper renderer that add 'REGISTER_ENABLED' variable to templates context"""
     if ctx is None:
@@ -29,13 +30,14 @@ def render_login(request, ctx=None):
     ctx['register_enabled'] = settings.REGISTER_ENABLED
     return render(request, 'football/login.html', ctx)
 
+
 def do_login(request, username, password, remember):
     """Perform the login routine.
     If authentication is successful, user is redirected to root (index) page.
     Otherwise, login form with errors and entered username / remember fields is rendered.
     """
 
-    ctx = { 'username': username, 'remember': remember }
+    ctx = {'username': username, 'remember': remember}
 
     def redraw():
         return render_login(request, ctx)

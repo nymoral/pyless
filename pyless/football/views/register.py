@@ -20,6 +20,7 @@ def register_view(request):
 
 required_fields = ('username', 'firstname', 'lastname', 'password', 'repeat', )
 
+
 def extract_data(data):
     user = {}
     user['username'] = data.get('username')
@@ -28,8 +29,10 @@ def extract_data(data):
     user['email'] = data.get('email')
     return user
 
+
 def validate(form, ctx):
     errors = False
+
     def add_error(name, value=True):
         ctx[name] = value
         errors = True
@@ -60,10 +63,10 @@ def validate(form, ctx):
 
     return not errors
 
+
 def do_register(request):
     data = request.POST
     ctx = {'data': data}
-
 
     def redraw():
         return render(request, 'football/user.html', ctx)

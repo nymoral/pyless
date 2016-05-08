@@ -9,10 +9,12 @@ from datetime import datetime, timezone
 
 
 class GameTest(TestCase):
+
     def setUp(self):
         Team.objects.create(short='LT', full_name='Lithuania')
         Team.objects.create(short='LV', full_name='Latvia')
-        Game.objects.create(team1_id='LT', team2_id='LV', time=datetime(2016, 7, 1, 21, 00, tzinfo=timezone.utc))
+        Game.objects.create(team1_id='LT', team2_id='LV', time=datetime(
+            2016, 7, 1, 21, 00, tzinfo=timezone.utc))
 
     def test_auto_close(self):
         g = Game.objects.get(team1_id='LT', team2_id='LV')
@@ -41,6 +43,7 @@ class GameTest(TestCase):
 
 
 class UserTest(TestCase):
+
     def test_autocreate_points(self):
         u = User(username='test', password='hunter2')
         u.save()
@@ -50,6 +53,7 @@ class UserTest(TestCase):
 
 
 class ValidationTest(TestCase):
+
     def test_check_len(self):
         self.assertFalse(check_len(None, 0))
         self.assertFalse(check_len(None, 1))
@@ -61,10 +65,12 @@ class ValidationTest(TestCase):
         self.assertTrue(check_len('123', 2))
 
     def test_require_missing(self):
-        form = {'empty': '', 'required': 'required', 'non_required': 'non_required'}
+        form = {'empty': '', 'required': 'required',
+                'non_required': 'non_required'}
         r = required_missing(form, [])
         self.assertEqual(len(r), 0)
-        r = required_missing(form, ['empty', 'required', 'required_not_presend'])
+        r = required_missing(
+            form, ['empty', 'required', 'required_not_presend'])
         self.assertFalse('non_required' in r)
         self.assertFalse('required' in r)
         self.assertTrue('empty' in r)

@@ -31,7 +31,7 @@ class Game(models.Model):
     team1 = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='+')
     team2 = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='+')
     time = models.DateTimeField()
-    closed =models.DateTimeField(blank=True, default=None, null=True)
+    closed = models.DateTimeField(blank=True, default=None, null=True)
     ended = models.DateTimeField(blank=True, default=None, null=True)
     result1 = models.IntegerField(blank=True, null=True)
     result2 = models.IntegerField(blank=True, null=True)
@@ -68,19 +68,23 @@ class Guess(models.Model):
     relust2 = models.IntegerField()
     subbmited = models.DateTimeField(auto_now_add=True)
 
+
 class Points(models.Model):
     """Points is single users results used to sort and display results table"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, primary_key=True)
     points = models.IntegerField(default=0)
     correct = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.user)
 
+
 @receiver(post_save, sender=Game)
 def after_game_save(sender, instance, **kwargs):
     """Here points will be calculated"""
     pass
+
 
 @receiver(post_save, sender=User)
 def after_user_save(sender, instance, **kwargs):

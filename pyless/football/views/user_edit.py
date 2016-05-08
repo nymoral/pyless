@@ -24,6 +24,7 @@ def settings_view(request):
 
     return render(request, 'football/user.html', ctx)
 
+
 def data_from_user(user):
     """Return templates context with values from user model"""
     data = {}
@@ -32,6 +33,7 @@ def data_from_user(user):
     data['firstname'] = user.first_name
     data['lastname'] = user.last_name
     return data
+
 
 def do_update(request, ctx):
     """Perform validation and update user object"""
