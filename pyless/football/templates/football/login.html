@@ -1,0 +1,46 @@
+{% extends "football/base.html" %}
+
+{% block content %}
+        <div class="container">
+            <form class="form-auth" method="POST" action="{% url 'login' %}">
+                <h2 class="form-auth-heading form-login">Sveiki!</h2>
+
+                <div class="form-group">
+                    <label for="inputUsername" class="sr-only">Vartotojo vardas</label>
+                    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Vartotojo vardas" value="{{ username }}" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPassword" class="sr-only">Slaptažodis</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Slaptažodis" required>
+                </div>
+
+                {% if required_error or auth_error or active_error %}
+                <div class="panel panel-warning">
+                    <div class="panel-heading">Nesekmė</div>
+                    <ul class="list-group">
+                        {% if required_error %}<li class="list-group-item">Būtina užpildyti vartotojo vardo ir slaptažodžio laukus!</li>{% endif %}
+                        {% if auth_error %}<li class="list-group-item">Vartotojo su tokiu vardu ir slaptažodžiu nėra!</li>{% endif %}
+                        {% if active_error %}<li class="list-group-item">Šiam vartotojui neleidžiama prisijungti!</li>{% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+                <div class="checkbox">
+                    <label>
+                        <input name="remember" type="checkbox" value="remember-me" id="inputRemember" {% if remember %}checked="checked"{% endif %} > Prisiminti
+                    </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Prisijungti</button>
+                <div class="row links-group">
+                    <div class="col-md-6 left">
+                        {% if register_enabled %}<a href="{% url 'register' %}">Registracija</a>{% endif %}
+                    </div>
+                    <div class="col-md-6 right">
+                        <a href="{% url 'register' %}">Pamiršau slaptažodį</a>
+                    </div>
+                </div>
+                {% csrf_token %}
+                <input type="hidden" name="next_url" value="{{ next_url }}">
+            </form>
+        </div>
+{% endblock %}

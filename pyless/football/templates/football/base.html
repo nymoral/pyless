@@ -1,0 +1,65 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Totalizatorius 2016{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'football/css/bootstrap.min.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="{% static 'football/css/main.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+        {% if user.is_authenticated %}
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Navigacija</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        {% endif %}
+        <a class="navbar-brand" href="{% url 'index' %}">Totalizatorius 2016</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'index' %}">Rezultatai</a></li>
+            <li><a href="{% url 'index' %}">Mano spėjimai</a></li>
+            {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'settings' %}">Nustatymai</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/admin/">Administravimas</a></li>
+            </ul>
+            </li>
+            <li><a href="{% url 'logout' %}">Atsijungti</a></li>
+            {% endif %}
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+    <div class="master-container">
+    {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="{% static 'football/js/main.js' %}"></script>
+</body>
+</html>

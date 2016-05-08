@@ -1,0 +1,71 @@
+{% extends "football/base.html" %}
+
+{% block title %}{% if is_edit %}Nustatymai{% else %}Registracija{% endif %}{% endblock %}
+
+{% block content %}
+        <div class="container">
+            <form class="form-auth form-register" method="POST" action="{% if is_edit %}{% url 'settings' %}{% else %}{% url 'register' %}{% endif %}">
+                <h4 class="form-auth-heading">{% if is_edit %}Profilis{% else %}Registracija{% endif %}</h4>
+
+                <div class="form-group{% if exists_error or required.username %} has-error{% endif %}">
+                    <label for="inputUsername" class="sr-only">Vartotojo vardas</label>
+                    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Vartotojo vardas" value="{{ data.username }}" required onblur="remove_error(this);">
+                </div>
+                <div class="form-group{% if required.firstname %} has-error{% endif %}">
+                    <label for="inputFirstname" class="sr-only">Vardas</label>
+                    <input type="text" name="firstname" id="inputFirstname" class="form-control" placeholder="Vardas" value="{{ data.firstname }}" required onblur="remove_error(this);">
+                </div>
+                <div class="form-group{% if required.lastname %} has-error{% endif %}">
+                    <label for="inputLastname" class="sr-only">Pavardė</label>
+                        <input type="text" name="lastname" id="inputLastname" class="form-control" placeholder="Pavardė" value="{{ data.lastname }}" required onblur="remove_error(this);">
+                </div>
+                <div class="form-group{% if password_req_error or required.password %} has-error{% endif %}">
+                    <label for="inputPassword" class="sr-only">{% if is_edit %}Naujas slaptažodis{% else %}Slaptažodis{% endif %}</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="{% if is_edit %}Naujas slaptažodis{% else %}Slaptažodis{% endif %}" required onblur="remove_error(this);">
+                </div>
+                <div class="form-group{% if required.repeat or password_match_error %} has-error{% endif %}">
+                    <label for="inputRepeat" class="sr-only">Pakartoti</label>
+                    <input type="password" name="repeat" id="inputRepeat" class="form-control" placeholder="Pakartoti" required onblur="remove_error(this);">
+                </div>
+                {% if is_edit %}
+                <div class="form-group{% if current_password_error %} has-error{% endif %}">
+                    <label for="inputCurrentPassword" class="sr-only">Dabartinis laptažodis</label>
+                    <input type="password" name="current_password" id="inputCurrentPassword" class="form-control" placeholder="Dabartinis slaptažodis" required onblur="remove_error(this);">
+                </div>
+                {% endif %}
+                <div class="form-group{% if email_format_error %} has-error{% endif %}">
+                    <label for="inputEmail" class="sr-only">El. paštas</label>
+                    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="El. paštas" value="{{ data.email }}" onblur="remove_error(this);">
+                    <span class="help-block">El. pašto adresas nėra privalomas, tačiau reikalingas užmiršus slaptažodį.</span>
+                </div>
+
+                {% if required_error or exists_error or password_req_error or password_match_error or input_length_error or email_format_error or current_password_error %}
+                <div class="panel panel-warning">
+                    <div class="panel-heading">Nesekmė</div>
+                    <ul class="list-group">
+                        {% if required_error %}<li class="list-group-item">Liko neužpildytų laukų!</li>{% endif %}
+                        {% if exists_error %}<li class="list-group-item">Vartotojo su tokiu vartotojo vardu jau egzistuoja!</li>{% endif %}
+                        {% if password_req_error %}<li class="list-group-item">Per trumpas slaptažodis! Slaptažodis turi būti bent 6 simbolių ilgio.</li>{% endif %}
+                        {% if password_match_error %}<li class="list-group-item">Slaptažodžiai nesutampa!</li>{% endif %}
+                        {% if input_length_error %}<li class="list-group-item">Per ilga įvestis!</li>{% endif %}
+                        {% if email_format_error %}<li class="list-group-item">Neteisingas el. pašto adreso formatas!</li>{% endif %}
+                        {% if current_password_error %}<li class="list-group-item">Neteisingas slaptažodis!</li>{% endif %}
+                    </ul>
+                </div>
+                {% elif success %}
+                <div class="panel panel-success">
+                    <div class="panel-heading">Registracija pavyko</div>
+                    <div class="panel-body">
+                        <p><a href="{% url 'login-username' data.username %}">Prisijungti galite čia.</a></p>
+                    </div>
+                </div>
+                {% elif edit_success %}
+                <div class="panel panel-success">
+                    <div class="panel-heading">Duomenys sėkmingai atnaujinti</div>
+                </div>
+                {% endif %}
+                <button class="btn btn-lg btn-primary btn-block" type="submit">{% if is_edit %}Išsaugoti{% else %}Registruotis{% endif %}</button>
+                {% csrf_token %}
+            </form>
+        </div>
+{% endblock %}

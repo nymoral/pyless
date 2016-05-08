@@ -1,0 +1,52 @@
+.master-container {
+  padding: 40px 15px;
+  text-align: center;
+}
+.form-auth .form-auth-heading,
+.form-auth .checkbox {
+  margin-bottom: 10px;
+}
+.form-auth .checkbox {
+  font-weight: normal;
+}
+.form-auth .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-auth .form-control:focus {
+  z-index: 2;
+}
+.form-auth input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-auth input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-auth {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-register {
+  max-width: 500px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.links-group {
+  margin-top: 10px;
+}
+.links-group .left {
+  text-align: left;
+}
+.links-group .right {
+  text-align: right;
+}
