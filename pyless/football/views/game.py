@@ -15,7 +15,7 @@ from football.models import Game, Points, Guess
 def game_view(request, game_id):
     game = get_object_or_404(Game, id=game_id)
     guesses = Guess.objects.select_related('user__first_name', 'user__last_name').filter(
-        game_id=game_id).order_by('points', 'id')
+        game_id=game_id).order_by('points', 'user__first_name', 'user__last_name', 'id')
 
     ctx = {'game': game, 'guesses': guesses}
     return render(request, 'football/game.html', ctx)

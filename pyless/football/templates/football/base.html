@@ -46,8 +46,10 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }} <span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a href="{% url 'settings' %}">Nustatymai</a></li>
+		{% if user.is_staff %}
                 <li role="separator" class="divider"></li>
                 <li><a href="/admin/">Administravimas</a></li>
+		{% endif %}
             </ul>
             </li>
             <li><a href="{% url 'logout' %}">Atsijungti</a></li>
