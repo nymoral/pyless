@@ -1,0 +1,39 @@
+{% extends "football/base.html" %}
+
+{% block content %}
+        <div class="container">
+            <form class="form-auth well" method="POST" action="{% url 'reset_view' reminderId=reminderId %}"> {% csrf_token %}
+                <h4 class="form-auth-heading form-login">Slaptažodžio atkūrimas</h4>
+
+                <div class="form-group">
+                    <label for="inputPassword" class="col-sm-3 control-label">Naujas slaptažodis</label>
+                    <div class="col-sm-9"><input type="password" name="password" id="inputPassword" class="form-control" placeholder="Naujas slaptažodis" required></div>
+                </div>
+                <div class="form-group">
+                    <label for="inputRepeat" class="col-sm-3 control-label">Pakartoti</label>
+                    <div class="col-sm-9"><input type="password" name="repeat" id="inputRepeat" class="form-control" placeholder="Pakartoti" required></div>
+                </div>
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Išsaugoti</button>
+            
+                <div style="margin-top: 20px;">
+                    {% if success %}
+                    <div class="panel panel-success">
+                        <div class="panel-heading">Išsaugota</div>
+                        <ul class="list-group">
+                            <li class="list-group-item">Slaptažodis sėkmingai pakeistas. Prisijungti galite <a href="{% url 'login_username' username %}">čia</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                    {% if error %}
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">Nepavyko</div>
+                        <ul class="list-group">
+                            <li class="list-group-item">Slaptažodžiai nesutampa arba slaptažodis yra per trumpas. Slaptažodis turi būti bent 6 simbolių ilgio.</li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                    </div>
+                </form>
+        </div>
+{% endblock %}

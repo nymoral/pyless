@@ -16,6 +16,7 @@ def too_long_fields(form, fields, n):
     """Returns list of names from fields that exceed length of n"""
     return [name for name in fields if form.get(name) != None and len(form.get(name)) > n]
 
+
 email_pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
 

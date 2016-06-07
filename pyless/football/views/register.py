@@ -18,27 +18,29 @@ def register_view(request):
     else:
         return do_register(request)
 
-required_fields = ('username', 'firstname', 'lastname', 'password', 'repeat', )
+required__no_pass = ('username', 'firstname', 'lastname', )
+required_fields = required__no_pass + ('password', 'repeat', )
 
 
 def extract_data(data):
     user = {}
-    user['username'] = data.get('username')
+    user['username'] = data.get('username').lower()
     user['first_name'] = data.get('firstname')
     user['last_name'] = data.get('lastname')
     user['email'] = data.get('email')
     return user
 
 
-def validate(form, ctx):
-    errors = False
+def validate(form, ctx, check_pass=True):
+    n_errors = 0
 
     def add_error(name, value=True):
         ctx[name] = value
-        errors = True
+        nonlocal n_errors
+        n_errors += 1
 
     # Perform required fields validation
-    required = required_missing(form, required_fields)
+    required = required_missing(form, required_fields if check_pass else required__no_pass)
     if len(required) > 0:
         add_error('required_error')
         add_error('required', {name: True for name in required})
@@ -47,21 +49,22 @@ def validate(form, ctx):
     if len(too_long_fields(form, ('firstname', 'lastname'), 30)) > 0:
         add_error('input_length_error')
 
-    password = form.get('password')
-    # Check for password length
-    if not check_len(password, 6):
-        add_error('password_req_error')
+    if check_pass:
+        password = form.get('password')
+        # Check for password length
+        if  not check_len(password, 6):
+            add_error('password_req_error')
 
-    # Check if passwords match
-    if password != form.get('repeat'):
-        add_error('password_match_error')
+        # Check if passwords match
+        if password != form.get('repeat'):
+            add_error('password_match_error')
 
     email = form.get('email')
     # If email was entered check if its format is good.
     if check_len(email, 1) and not is_email(email):
         add_error('email_format_error')
 
-    return not errors
+    return n_errors == 0
 
 
 def do_register(request):

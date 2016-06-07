@@ -1,0 +1,43 @@
+{% extends "football/base.html" %}
+
+{% block content %}
+        <div id="res-div" class="table-responsive container">
+            <table id="res-tab" class="{% if not small %}table-bordered table-condensed {% endif %}table results-table">
+                <thead>
+                    <tr>
+                        <td rowspan="2">#</td>
+                        <td rowspan="2" class="left table-cell">Vardas</td>
+                        <td rowspan="2" class="table-cell">Taškai</td>
+                        {% for game in data.games %}<td class="table-cell" data-container="body" data-toggle="tooltip" data-placement="top" title="{{ game.long_teams }}"><a href="{% url 'game_view' game_id=game.id %}">{{ game.short_teams }}</a></td>{% endfor %}
+                    </tr>
+                        {% for game in data.games %}<td data-container="body" data-toggle="tooltip" data-placement="bottom" title="{{ game.time|date:'Y-m-d H:i' }}">{{ game.result }}</td>{% endfor %}
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for guess_group in data.guesses %}
+                    {% with p=guess_group.points guesses=guess_group.guesses %}
+                    <tr>
+                        <td rowspan="2">{{ forloop.counter }}</td>
+                        <td rowspan="2" class="left"><a href="{% url 'guesses' p.user_id %}">{{ p.user.first_name|capfirst }} {{ p.user.last_name|slice:':1'|capfirst }}.</a></td>
+                        <td rowspan="2">{{ p.points }}</td>
+                        {% for guess in guesses %}<td>{% if guess %}{{ guess.result }}{% else %}&nbsp;{% endif %}</td>{% endfor %}
+                    </tr>
+                    <tr>
+                        {% for guess in guesses %}<td {% if guess %}class="{% if guess.late %}warning{% elif guess.correct %}success{% endif %}"{% endif %}>{% if guess %}{{ guess.form_points }}{% else %}&nbsp;{% endif %}</td>{% endfor %}
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(function () {
+    $("[data-toggle='tooltip']").tooltip();
+});
+</script>
+{% endblock %}

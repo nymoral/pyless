@@ -1,0 +1,38 @@
+{% extends "football/base.html" %}
+
+{% block content %}
+        <div class="container">
+            <form class="form-auth well" method="POST" action="{% url 'forgot' %}"> {% csrf_token %}
+                <h2 class="form-auth-heading form-login"></h2>
+
+                <div class="form-group">
+                    <label for="inputUsername" class="sr-only">Prisijungimo vardas</label>
+                    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Prisijungimo vardas" value="{{ username }}" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail" class="sr-only">El. pašto adresas</label>
+                    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="El. pašto adresas" value="{{ email }}" required>
+                </div>
+
+
+                {% if success %}
+                <div class="panel panel-success">
+                    <div class="panel-heading">Išsiųsta</div>
+                    <ul class="list-group">
+                        <li class="list-group-item">Laiškas su instrukcijomis buvo išsiųstas adresu <a>{{ email }}</a></li>
+                    </ul>
+                </div>
+                {% endif %}
+                {% if error %}
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Nepavyko</div>
+                    <ul class="list-group">
+                        <li class="list-group-item">Neteisingai užpildyti laukai</li>
+                    </ul>
+                </div>
+                {% endif %}
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Išsiųsti</button>
+            </form>
+        </div>
+{% endblock %}

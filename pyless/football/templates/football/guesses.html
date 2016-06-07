@@ -1,0 +1,58 @@
+{% extends "football/base.html" %}
+
+{% block title %}Spėjimai{% endblock %}
+
+{% block content %}
+        <div class="container">
+            <div class="page-header">
+                <p><h4>{{ points.user.first_name|capfirst }} {{ points.user.last_name|capfirst }}</h4></p>
+            </div>
+
+            <form{% if own %} method="POST" action="{% url 'guesses' user.id %}"{% endif %}>
+            {% if updated %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Uždaryti"><span aria-hidden="true">&times;</span></button>
+                    <p>Spėjimai sėkmingai atnaujinti</p>
+                </div>
+                {% endif %}
+
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <td>Data</td>
+                        <td class="center">Varžybos</td>
+                        <td>Rezultatas</td>
+                        <td>Spėjimas</td>
+                        <td>Taškai</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% now 'Ymd' as today %}
+                    {% for game in games %}
+                    {% with guess=game.users_guess|first game_day=game.time|date:'Ymd' %}
+                    <tr class="game {% if guess and guess.late %}danger{% elif guess and guess.correct %}success{% elif game.closed %}active{% elif today == game_day %}info{% elif game.important %}info{% endif %}">
+                        <td>{{ game.time|date:'Y-m-d H:i' }}</td>
+                        <td class="team center"><a href="{% url 'game_view' game_id=game.id %}">{{ game.long_teams }}</a></td>
+                        <td class="center">{{ game.result }}</td>
+                        <td><input {% if game.closed or not own %}disabled="disabled"{% endif %} class="guess-input" id="id_{{ game.input_name }}" type="text" autocomplete="off" name="{{ game.input_name }}" value="{% if guess %}{% if own or game.closed %}{{ guess.result }}{% endif %}{% endif %}" onblur="guess_changed(this)" onkeyup="guess_changed(this)"></td>
+                        <td>{% if guess %}{{ guess.form_points }}{% endif %}</td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"></td>
+                        <td>{{ points.points }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+            {% csrf_token %}
+            {% if own %}
+            <div class="half">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Atnaujinti</button>
+            </div>
+            {% endif %}
+            </form>
+        </div>
+{% endblock %}

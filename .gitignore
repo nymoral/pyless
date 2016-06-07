@@ -3,3 +3,7 @@ env/
 *.sqlite3
 __pycache__
 .vscode
+*.tgz
+tmp/
+codeintel/
+pyless.sublime*

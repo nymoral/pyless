@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 from .register import validate
 from .validation import good_password
@@ -38,22 +39,30 @@ def data_from_user(user):
 def do_update(request, ctx):
     """Perform validation and update user object"""
     form = request.POST
-    if not validate(form, ctx):
+
+    change_pass = len(form.get('password', '')) > 0
+
+    if not validate(form, ctx, change_pass):
         return
 
-    if not good_password(request.user, form.get('current_password')):
+    if change_pass and not good_password(request.user, form.get('current_password')):
         ctx['current_password_error'] = True
         return
 
     u = request.user
-    u.username = form.get('username')
+    u.username = form.get('username').lower()
     u.first_name = form.get('firstname')
     u.last_name = form.get('lastname')
     u.email = form.get('email')
-    u.set_password(form.get('password'))
+    if change_pass:
+        u.set_password(form.get('password'))
+
+    ctx['data'] = data_from_user(u)
+
     try:
         u.save()
     except IntegrityError:
         ctx['exists_error'] = True
     else:
         ctx['edit_success'] = True
+        update_session_auth_hash(request, u)

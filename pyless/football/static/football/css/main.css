@@ -1,10 +1,24 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+body{
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+
+}
 .master-container {
   padding: 40px 15px;
   text-align: center;
 }
 .form-auth .form-auth-heading,
 .form-auth .checkbox {
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 .form-auth .checkbox {
   font-weight: normal;
@@ -37,16 +51,45 @@
   margin: 0 auto;
 }
 .form-register {
-  max-width: 500px;
+  max-width: 600px;
   padding: 15px;
   margin: 0 auto;
 }
 .links-group {
   margin-top: 10px;
 }
-.links-group .left {
+.left {
   text-align: left;
 }
-.links-group .right {
+.right {
   text-align: right;
+}
+.game > td {
+  vertical-align: middle !important;
+}
+.game .guess-input {
+  max-width: 60px;
+  text-align: center;
+}
+.center {
+  text-align: center;
+}
+.half {
+  max-width: 50%;
+  margin: auto;
+}
+.home-table {
+  max-width: 400px;
+  margin: auto;
+}
+.top-buffer { margin-top:20px; }
+.table-cell {
+  min-width: 80px;
+}
+table.results-table  td {
+  text-align: center;
+  vertical-align: middle !important;
+}
+.links > a {
+  margin-right: 10px;
 }

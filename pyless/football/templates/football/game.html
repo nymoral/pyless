@@ -1,0 +1,29 @@
+{% extends "football/base.html" %}
+
+{% block title %}Rungtynės{% endblock %}
+
+{% block content %}
+        <div class="container">
+            <div class="page-header">
+                <p><h3>{{ game.long_teams }}</h3></p>
+                <p><h4>{{ game.time|date:'Y-m-d H:i' }}</h4></p>
+                <p><h4>{{ game.result }}</h4></p>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <td></td>
+                    <td>Spėjimas</td>
+                    <td>Taškai</td>
+                </thead>
+                <tbody>
+                    {% for g in guesses %}
+                    <tr>
+                        <td class="left"><a href="{% url 'guesses' g.user_id %}">{{ g.user.first_name|capfirst }} {{ g.user.last_name|slice:':1'|capfirst }}.</a></td>
+                        {% if game.closed %}<td{% if g.late %} class="warning"{% endif %}>{{ g.result }}</td>{% else %}<td></td>{% endif %}
+                        <td{% if g.correct %} class="success"{% endif %}>{{ g.form_points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}

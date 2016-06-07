@@ -36,8 +36,8 @@ def do_login(request, username, password, remember):
     If authentication is successful, user is redirected to root (index) page.
     Otherwise, login form with errors and entered username / remember fields is rendered.
     """
-
-    ctx = {'username': username, 'remember': remember}
+    next_url = request.POST.get('next_url', reverse('index'))
+    ctx = {'username': username, 'remember': remember, 'next_url': next_url}
 
     def redraw():
         return render_login(request, ctx)
@@ -46,7 +46,7 @@ def do_login(request, username, password, remember):
         ctx['required_error'] = True
         return redraw()
 
-    user = authenticate(username=username, password=password)
+    user = authenticate(username=username.lower(), password=password)
     if user is None:
         ctx['auth_error'] = True
         return redraw()
@@ -57,4 +57,4 @@ def do_login(request, username, password, remember):
     if not remember:
         request.session.set_expiry(0)
     login(request, user)
-    return HttpResponseRedirect(request.POST.get('next_url', reverse('index')))
+    return HttpResponseRedirect(next_url)

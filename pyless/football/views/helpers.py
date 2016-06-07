@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import logout
+from django.shortcuts import render
 
 
 @require_http_methods(['GET'])
@@ -18,3 +19,8 @@ def index(request):
         return HttpResponseRedirect(reverse('home'))
     else:
         return HttpResponseRedirect(reverse('login'))
+
+
+@require_http_methods(['GET'])
+def rules_view(request):
+    return render(request, 'football/rules.html')
