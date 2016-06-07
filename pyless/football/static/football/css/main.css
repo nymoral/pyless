@@ -59,10 +59,10 @@ body{
   margin-top: 10px;
 }
 .left {
-  text-align: left;
+  text-align: left !important;
 }
 .right {
-  text-align: right;
+  text-align: right !important;
 }
 .game > td {
   vertical-align: middle !important;
@@ -92,4 +92,7 @@ table.results-table  td {
 }
 .links > a {
   margin-right: 10px;
+}
+.page-header {
+  border-bottom: 0;
 }
