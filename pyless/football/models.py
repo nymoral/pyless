@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Case, When, Sum
 from django.core.cache import cache
+from django.utils import timezone
 
 import uuid
 
@@ -64,8 +65,13 @@ class Game(models.Model):
         Throw error if game that is ending does not have a valid result.
         """
 
-        if self.ended != None and (self.result1 == None or self.result2 == None):
-            raise ValidationError('Game that has ended must have result set')
+        if self.result1 != None and self.result2 != None:
+            self.ended= timezone.now()
+        if self.ended != None:
+            if self.result1 == None or self.result2 == None:
+                raise ValidationError('Game that has ended must have result set')
+            if self.result1 < 0 or self.result2 < 0:
+                raise ValidationError('Result can\'t be negative')
         if self.ended != None and self.closed == None:
             self.closed = self.ended
 
