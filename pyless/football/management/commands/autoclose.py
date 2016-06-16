@@ -14,4 +14,5 @@ class Command(BaseCommand):
             g.save()
             self.stdout.write('Game closed: {}'.format(g))
             c += 1
-        self.stdout.write('{} games closed'.format(c))
+        if c > 0:
+            self.stdout.write('{} games closed'.format(c))

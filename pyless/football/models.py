@@ -131,6 +131,8 @@ class Guess(models.Model):
         corr_out = False
         if penalty and self.late:
             self.points = penalty
+        elif self.late:
+            self.points = 0
         elif res == (self.result1, self.result2):
             self.points = -7 if only else -3
             corr_out = True
@@ -199,8 +201,8 @@ def game_ended(game):
     res = (game.result1, game.result2)
     guesses = Guess.objects.filter(game_id=game.id).all()
     points = list(map(lambda g: g.calc(res), guesses))
-    penalty = max(p(0) for p in points) if len(points) > 0 else None
-    only = sum(1 for p in points if p(1)) == 1
+    penalty = max(p[0] for p in points) if len(points) > 0 else None
+    only = sum(1 for p in points if p[1]) == 1
     for g in guesses:
         g.calc(res, penalty, only)
         g.save()
